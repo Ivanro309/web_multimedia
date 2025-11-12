@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El Inmortal - TV Player</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+    h1 {
+      margin-top: 30px;
+      font-size: 2em;
+    }
+    video {
+      width: 90vw;
+      height: auto;
+      margin-top: 20px;
+      border: 2px solid #555;
+    }
+    .controls {
+      margin-top: 20px;
+    }
+    button {
+      background: #0078ff;
+      border: none;
+      padding: 15px 30px;
+      margin: 10px;
+      color: white;
+      font-size: 1.2em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    button:focus {
+      outline: none;
+      transform: scale(1.1);
+      background: #00aaff;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎞️ El Inmortal - Reproductor TV</h1>
+
+  <video id="video" controls></video>
+
+  <div class="controls">
+    <button id="ep1" tabindex="1" onclick="loadVideo(1)">Episodio 1</button>
+    <button id="ep2" tabindex="2" onclick="loadVideo(2)">Episodio 2</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const buttons = [document.getElementById('ep1'), document.getElementById('ep2')];
+
+    const sources = {
+      1: "https://be2719.rcr22.ams01.i8yz83pn.com/hls2/01/05572/pgkskrwzocpb_x/master.m3u8?t=gkV4jew5GR_gY7yFtLQqRwrG8M4_s_yLFRlICqYtpkE&s=1762984586&e=10800&f=27863414&srv=1060&asn=12338&sp=5500&p=",
+      2: "https://be2719.rcr22.ams01.i8yz83pn.com/hls2/08/05572/q29o1yxpn8pq_x/master.m3u8?t=IFzyuXVMVXGI7IvitD1FRa1dSkneX1kg6ABPvEUgoAs&s=1762985051&e=10800&f=27863602&srv=1070&asn=12338&sp=5500&p="
+    };
+
+    function loadVideo(num) {
+      const src = sources[num];
+      if (!src) return;
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play();
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+        video.play();
+      } else {
+        alert("Tu TV no soporta HLS.");
+      }
+    }
+
+    // 🔸 Navegación con el control remoto (flechas y Enter)
+    let focusIndex = 0;
+    buttons[focusIndex].focus();
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "ArrowRight") {
+        focusIndex = (focusIndex + 1) % buttons.length;
+        buttons[focusIndex].focus();
+      } else if (e.key === "ArrowLeft") {
+        focusIndex = (focusIndex - 1 + buttons.length) % buttons.length;
+        buttons[focusIndex].focus();
+      } else if (e.key === "Enter") {
+        buttons[focusIndex].click();
+      }
+    });
+  </script>
+</body>
+</html>
