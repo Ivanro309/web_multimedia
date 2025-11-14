@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>El Inmortal - TV Player</title>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     body {
       background-color: #000;
@@ -16,9 +15,9 @@
       margin-top: 30px;
       font-size: 2em;
     }
-    video {
+    iframe {
       width: 90vw;
-      height: auto;
+      height: 60vh;
       margin-top: 20px;
       border: 2px solid #555;
     }
@@ -46,38 +45,48 @@
 <body>
   <h1>🎞️ El Inmortal - Reproductor TV</h1>
 
-  <video id="video" controls></video>
+  <div id="player-container">
+    <!-- Aquí se cargará el iframe -->
+    <iframe id="player" src="" frameborder="0" allowfullscreen scrolling="no"></iframe>
+  </div>
 
   <div class="controls">
-    <button id="ep1" tabindex="1" onclick="loadVideo(1)">Episodio 1</button>
-    <button id="ep2" tabindex="2" onclick="loadVideo(2)">Episodio 2</button>
+    <button id="ep1" tabindex="1" onclick="loadEpisode(1)">Episodio 1</button>
+    <button id="ep2" tabindex="2" onclick="loadEpisode(2)">Episodio 2</button>
+    <button id="ep3" tabindex="3" onclick="loadEpisode(3)">Episodio 3</button>
+    <button id="ep4" tabindex="4" onclick="loadEpisode(4)">Episodio 4</button>
+    <button id="ep5" tabindex="5" onclick="loadEpisode(5)">Episodio 5</button>
+    <button id="ep6" tabindex="6" onclick="loadEpisode(6)">Episodio 6</button>
+    <button id="ep7" tabindex="7" onclick="loadEpisode(7)">Episodio 7</button>
+    <button id="ep8" tabindex="8" onclick="loadEpisode(8)">Episodio 8</button>
   </div>
 
   <script>
-    const video = document.getElementById('video');
-    const buttons = [document.getElementById('ep1'), document.getElementById('ep2')];
+    const iframe = document.getElementById('player');
+    const buttons = [
+      document.getElementById('ep1'),
+      document.getElementById('ep2'),
+      document.getElementById('ep3'),
+      document.getElementById('ep4'),
+      document.getElementById('ep5'),
+      document.getElementById('ep6'),
+      document.getElementById('ep7'),
+      document.getElementById('ep8')
+    ];
 
     const sources = {
-      1: "https://be2719.rcr22.ams01.i8yz83pn.com/hls2/01/05572/pgkskrwzocpb_x/master.m3u8?t=gkV4jew5GR_gY7yFtLQqRwrG8M4_s_yLFRlICqYtpkE&s=1762984586&e=10800&f=27863414&srv=1060&asn=12338&sp=5500&p=",
-      2: "https://be2719.rcr22.ams01.i8yz83pn.com/hls2/08/05572/q29o1yxpn8pq_x/master.m3u8?t=IFzyuXVMVXGI7IvitD1FRa1dSkneX1kg6ABPvEUgoAs&s=1762985051&e=10800&f=27863602&srv=1070&asn=12338&sp=5500&p="
+      1: "https://voe.sx/e/jsbib4oppo5c",
+      2: "https://voe.sx/e/veuak0jkljkw",
+      3: "https://voe.sx/e/gqns68x2bl7f",
+      4: "https://voe.sx/e/mt9ebidjnxz8",
+      5: "https://voe.sx/e/bfualuhrfn1b",
+      6: "https://voe.sx/e/od7mkoqoq07j",
+      7: "https://voe.sx/e/bck8sdkenuj1",
+      8: "https://voe.sx/e/hh3fxrcp1qnl"
     };
 
-    function loadVideo(num) {
-      const src = sources[num];
-      if (!src) return;
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(src);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-          video.play();
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = src;
-        video.play();
-      } else {
-        alert("Tu TV no soporta HLS.");
-      }
+    function loadEpisode(num) {
+      iframe.src = sources[num];
     }
 
     // 🔸 Navegación con el control remoto (flechas y Enter)
@@ -95,6 +104,9 @@
         buttons[focusIndex].click();
       }
     });
+
+    // Cargar el primer episodio por defecto
+    loadEpisode(1);
   </script>
 </body>
 </html>
